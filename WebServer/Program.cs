@@ -1,6 +1,11 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "ПРИВЕТ ОТ ИСП 233 автор Dragonyafa");
+app.MapGet("/", () => "Добро пожаловать на срвер!");
+app.MapGet("/about", () => "Это мой первый ASP.NET Core серрвер");
+app.MapGet("/time", () => $"Время на сервере {DateTime.Now}");
+app.MapGet("/hello/{name}", (string name) => $"Привет {name}");
+
+app.MapGet("/sum/{a}/{b}", (int a, int b) => $"Сумма {a+b}");
 
 app.Run();
