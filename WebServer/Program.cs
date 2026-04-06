@@ -31,6 +31,31 @@ app.MapGet("/product/{id}", (int id) => new Product (
 ));
 
 
+app.Use(async ( context, next ) => {
+    Console.WriteLine($"[LOG] {context.Request.Method} {context.Request.Path}");
+    await next(context);
+    Console.WriteLine($"[LOG] Ответ отправлен {context.Response.StatusCode}");
+});
+
+app.Use(async ( context, next ) => {
+    context.Response.Headers.Append("X-Powered-By" , "ASP.NET Core Lab27");
+    await next(context);
+});
+
+
+app.Use(async (context, next) =>
+{
+    var key = context.Request.Query["key"]; //берем значени параметра кей
+    
+    if (key != "secret") 
+    {
+        context.Response.StatusCode = 401;  
+        await context.Response.WriteAsync("Access denied. Valid 'key' parameter required.");
+        return; 
+    }
+    
+    await next(); 
+});
 
 app.Run();
 
